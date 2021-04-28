@@ -13,6 +13,7 @@ class StructAnalyzer(object):
         except:
             raise Exception("Could not open vec file")
         resistance_list = []
+        biggest_size = 0
         for line in vec_file:
             new_G = nx.DiGraph()
             new_G.add_nodes_from(list(self.pg_struct.G.nodes()))
@@ -29,8 +30,12 @@ class StructAnalyzer(object):
                 new_pg_struct.add_edge(edge)
             new_pg_struct.connect_vdd_and_gnd()
             # new_pg_struct.draw()
-            total_resistance = new_pg_struct.calc_res()
-            resistance_list.append(total_resistance.res)
-        print(resistance_list)
+            total = new_pg_struct.calc_res()
+            if total.size > biggest_size:
+                biggest_size = total.size
+            resistance_list.append(total.res)
+        resistance_list.sort()
         plt.hist(resistance_list)
         plt.show()
+        result_dict = {'struct_size': biggest_size, 'res_list': resistance_list}
+        return result_dict
