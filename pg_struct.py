@@ -7,8 +7,8 @@ from power_gate import PowerGate
 class PGStruct(object):
     def __init__(self):
         self.G = nx.DiGraph()
-        self.vdd = PowerGate(0, 0, name='VDD')
-        self.logic = PowerGate(0, 0, name='Logic')
+        self.vdd = PowerGate(0, name='VDD')
+        self.logic = PowerGate(0, name='Logic')
         self.G.add_node(self.vdd.id)
         self.G.add_node(self.logic.id)
         self.label_dict = {'VDD':'VDD', 'Logic':'Logic'}
