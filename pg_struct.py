@@ -23,11 +23,6 @@ class PGStruct(object):
         self.color_map.append(pg.color)
         self.G.add_node(pg.id)
 
-    def remove_node(self, pg):
-        self.color_map.remove(pg.color)
-        self.label_dict.pop(pg.id)
-        self.G.remove_node(pg.id)
-
     def add_edge(self, pg1, pg2):
         self.G.add_edge(pg1.id, pg2.id)
         if self.family_tree.get(pg1.id, None) == None:
@@ -37,7 +32,6 @@ class PGStruct(object):
         self.reverse_family_tree[pg2.id] = pg1.id
 
     def merge_children_to_father(self, node):
-        # print(node)
         father_id = self.reverse_family_tree.get(node, None)
         if father_id == None:
             return None
@@ -50,10 +44,7 @@ class PGStruct(object):
                 res |= PowerGate.get_pg_by_id(sib)
         new_father = PowerGate.get_pg_by_id(father_id) & res
         PowerGate.update_pg(father_id, new_father)
-        # for pg in PowerGate.all_pgs:
-        #     print(PowerGate.all_pgs[pg])
         return siblings
-
 
     def calc_res(self):
         all_paths = dict(nx.all_pairs_shortest_path_length(self.G))
@@ -76,7 +67,6 @@ class PGStruct(object):
                     if siblings != None:
                         for sib in siblings:
                             ignore_list.append(sib)
-
         final_result = 0
         for i in all_paths['VDD']:
             if all_paths['VDD'][i] == 1:
