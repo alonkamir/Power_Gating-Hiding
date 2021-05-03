@@ -19,7 +19,7 @@ class PGStruct(object):
         self.reverse_family_tree = {}
 
     def add_node(self, pg):
-        self.label_dict[pg.id] = pg.res
+        self.label_dict[pg.id] = 1/pg.res
         self.color_map.append(pg.color)
         self.G.add_node(pg.id)
 
@@ -75,6 +75,14 @@ class PGStruct(object):
                 else:
                     final_result |= PowerGate.get_pg_by_id(i)
         return final_result
+    
+    def calc_total_area(self):
+        total_area = 0
+        for node in (list(self.G.nodes)):
+            pg = PowerGate.get_pg_by_id(node)
+            if pg != None:
+                total_area += PowerGate.get_pg_area(str(pg.size))
+        return total_area
 
     def connect_vdd_and_gnd(self):
         for node in (list(self.G.nodes)):
